@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from '../firebase';
 import { signInWithEmailAndPassword,
   setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 import './Auth.css';
+import { auth } from '../firebase.js';
 import { alertAndLogErr } from '../utils.js';
 
 const Auth = ({ onSignIn }) => {
