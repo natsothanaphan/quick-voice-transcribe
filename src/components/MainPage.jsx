@@ -64,6 +64,18 @@ const MainPage = ({ user }) => {
     }
   };
 
+  const handleCopyResult = async () => {
+    const text = result?.text;
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Copied text:', text);
+      alert('Copied text to clipboard');
+    } catch (err) {
+      alertAndLogErr(err);
+    }
+  };
+
   const handleReset = () => {
     setRecording(false);
     setAudioBlob(null);
@@ -78,26 +90,22 @@ const MainPage = ({ user }) => {
     }
     const url = URL.createObjectURL(audioBlob);
     setAudioUrl(url);
-    return () =>  URL.revokeObjectURL(url);
+    return () => URL.revokeObjectURL(url);
   }, [audioBlob]);
 
   return <>
     <form className='submit-form' onSubmit={handleSubmit}>
-      {!recording && <button type='button' onClick={startRecording} disabled={loading} title='Start'>▶️</button>}
+      {!recording && <button type='button' onClick={startRecording} disabled={loading} title='Record'>🎤</button>}
       {recording && <button type='button' onClick={stopRecording} disabled={loading} title='Stop'>⏹️</button>}
-      <button type='submit' disabled={loading || !audioBlob}>{loading ? 'Loading...' : '🚀'}</button>
+      {' '}<button type='submit' disabled={loading || !audioBlob} title='Submit'>{loading ? 'Loading...' : '🚀'}</button>
     </form>
-    {audioBlob && (
-      <div className='audio-player'>
-        <audio controls src={audioUrl}>Audio not supported</audio>
-      </div>
-    )}
-    {!loading && result && (
-      <div className='result-container'>
-        <pre>{JSON.stringify(result, null, 2)}</pre>
-      </div>
-    )}
-    <button onClick={handleReset} className='reset-button' title='Clear'>❌</button>
+    {audioBlob && <div className='audio-player'>
+      <audio controls src={audioUrl}>Audio not supported</audio>
+    </div>}
+    {!loading && result && <div className='result-container' onClick={handleCopyResult}>
+      <pre>{result.text}</pre>
+    </div>}
+    <button onClick={handleReset} className='reset-button' disabled={loading} title='Clear'>❌</button>
   </>;
 };
 
