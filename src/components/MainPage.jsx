@@ -3,7 +3,7 @@ import './MainPage.css';
 import api from '../api.js';
 import { alertAndLogErr } from '../utils.js';
 
-const MainPage = ({ user }) => {
+const MainPage = ({ user, onGoToHistory }) => {
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -106,6 +106,7 @@ const MainPage = ({ user }) => {
       <pre>{result.text}</pre>
     </div>}
     <button onClick={handleReset} className='reset-button' disabled={loading} title='Clear'>❌</button>
+    <button onClick={onGoToHistory} className='history-button'>History</button>
   </>;
 };
 
